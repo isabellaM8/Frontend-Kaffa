@@ -1,19 +1,18 @@
 import { Link } from "react-router-dom";
-import logoCafe from "../imagenes/logoKaffa.png"; // ✅ tu logo principal en formato PNG
+import logoCafe from "../imagenes/Logo.jpeg";
 
 function BarraNavegacion() {
   return (
     <header className="bg-green-900 text-white">
       <nav className="max-w-7xl mx-auto flex justify-between items-center p-4">
         
-        {/* Logo redondo + texto en cursiva */}
-        <div className="flex items-center gap-3">
+        {/* Logo redondo + texto en cursiva */}        <div className="flex items-center gap-3">
           <img 
             src={logoCafe} 
             alt="Logo KAFFA Café" 
-            className="w-20 h-20 rounded-full" // ✅ logo redondo y más grande
+            className="w-20 h-20 rounded-full" 
           />
-          <span className="italic font-bold text-2xl">KAFFA</span> {/* ✅ texto en cursiva */}
+          <span className="italic font-bold text-2xl">KAFFA</span> {/*  texto en cursiva */}
         </div>
 
         {/* Navegación */}

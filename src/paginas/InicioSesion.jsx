@@ -11,32 +11,35 @@ export default function InicioSesion() {
   const manejarLogin = (e) => {
     e.preventDefault();
 
-    // Caso especial: administrador fijo
+    // 🔹 Caso especial: administrador fijo
     if (usuario === "admin" && contrasena === "1234") {
       localStorage.setItem("usuarioActivo", JSON.stringify({ rol: "admin", usuario }));
-      navigate("/admin", { replace: true }); // ✅ aquí sí usamos replace
+      navigate("/admin", { replace: true });
       return;
     }
 
-    // Leer usuarios guardados en localStorage (baristas y clientes)
-    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+    // 🔹 Leer clientes y baristas desde localStorage
+    const clientes = JSON.parse(localStorage.getItem("usuarios")) || [];
+    const baristas = JSON.parse(localStorage.getItem("baristas")) || [];
+    const todosUsuarios = [...clientes, ...baristas];
 
-    // Buscar coincidencia
-    const usuarioEncontrado = usuarios.find(
-      (u) => u.usuario === usuario && u.contraseña === contrasena
+    // 🔹 Buscar coincidencia (usamos siempre 'contrasena' sin ñ)
+    const usuarioEncontrado = todosUsuarios.find(
+      (u) => u.usuario === usuario && u.contrasena === contrasena
     );
 
     if (usuarioEncontrado) {
       // Guardar sesión activa
       localStorage.setItem("usuarioActivo", JSON.stringify(usuarioEncontrado));
 
+      // Redirigir según rol
       if (usuarioEncontrado.rol === "barista") {
-        navigate("/barista", { replace: true }); // ✅ replace aquí
+        navigate("/barista", { replace: true });
       } else if (usuarioEncontrado.rol === "cliente") {
-        navigate("/cliente", { replace: true }); // ✅ replace aquí
+        navigate("/cliente", { replace: true });
       }
     } else {
-      alert("Usuario o contraseña incorrectos");
+      alert("❌ Usuario o contraseña incorrectos");
     }
   };
 
@@ -81,7 +84,6 @@ export default function InicioSesion() {
         <div className="text-center mt-4 text-gray-700 space-y-2">
           <p>
             ¿No tienes cuenta?{" "}
-            {/* 🚀 sin replace, para que atrás vuelva a Bienvenida */}
             <Link to="/registro" className="text-green-700 hover:underline font-semibold">
               Regístrate aquí
             </Link>

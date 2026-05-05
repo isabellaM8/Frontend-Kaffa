@@ -5,7 +5,7 @@ import HeroBienvenida from "../componentes/HeroBienvenida";
 import TarjetaProducto from "../componentes/TarjetaProducto";
 import SeccionSobreNosotros from "../componentes/SeccionSobreNosotros";
 import PieDePagina from "../componentes/PieDePagina";
-import SombraGlobal from "../componentes/SombraGlobal"; // ✅ sombra
+import SombraGlobal from "../componentes/SombraGlobal"; 
 
 import fondoImg from "../imagenes/fondoP1.jpg";
 import capuchinoImg from "../imagenes/capuchino.jpg";

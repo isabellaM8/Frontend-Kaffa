@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 
 export default function BaristasAdmin({ darkMode }) {
-  const [baristas, setBaristas] = useState([
-    { id: 1, nombre: "Carlos Pérez", usuario: "carlos.perez12", contraseña: "abc12345", turno: "Mañana" },
-    { id: 2, nombre: "Ana Gómez", usuario: "ana.gomez34", contraseña: "xyz67890", turno: "Tarde" },
-  ]);
+  const [baristas, setBaristas] = useState([]);
+
+  // 🔹 Cargar baristas desde localStorage al iniciar
+  useEffect(() => {
+    const guardados = JSON.parse(localStorage.getItem("baristas")) || [];
+    setBaristas(guardados);
+  }, []);
 
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [modoEdicion, setModoEdicion] = useState(false);
@@ -13,7 +16,7 @@ export default function BaristasAdmin({ darkMode }) {
   const [nuevoBarista, setNuevoBarista] = useState({
     nombre: "",
     usuario: "",
-    contraseña: "",
+    contrasena: "",
     turno: "",
   });
 
@@ -26,8 +29,8 @@ export default function BaristasAdmin({ darkMode }) {
         const apellido = partes[1].toLowerCase();
         const numero = Math.floor(Math.random() * 90 + 10); // número corto de 2 dígitos
         const usuario = `${nombre}.${apellido}${numero}`;
-        const contraseña = Math.random().toString(36).slice(-8);
-        setNuevoBarista((prev) => ({ ...prev, usuario, contraseña }));
+        const contrasena = Math.random().toString(36).slice(-8);
+        setNuevoBarista((prev) => ({ ...prev, usuario, contrasena }));
       }
     }
   }, [nuevoBarista.nombre, modoEdicion]);
@@ -37,26 +40,30 @@ export default function BaristasAdmin({ darkMode }) {
     e.preventDefault();
     if (!nuevoBarista.nombre || !nuevoBarista.turno) return;
 
+    let baristasActualizados;
     if (modoEdicion && baristaEditando) {
-      const baristasActualizados = baristas.map((b) =>
+      baristasActualizados = baristas.map((b) =>
         b.id === baristaEditando.id
           ? { ...b, nombre: nuevoBarista.nombre, turno: nuevoBarista.turno }
           : b
       );
-      setBaristas(baristasActualizados);
     } else {
       const id = Date.now();
       const barista = {
         id,
         nombre: nuevoBarista.nombre,
         usuario: nuevoBarista.usuario,
-        contraseña: nuevoBarista.contraseña,
+        contrasena: nuevoBarista.contrasena, // 🔹 corregido
         turno: nuevoBarista.turno,
+        rol: "barista", // 🔹 importante para login
       };
-      setBaristas([...baristas, barista]);
+      baristasActualizados = [...baristas, barista];
     }
 
-    setNuevoBarista({ nombre: "", usuario: "", contraseña: "", turno: "" });
+    setBaristas(baristasActualizados);
+    localStorage.setItem("baristas", JSON.stringify(baristasActualizados));
+
+    setNuevoBarista({ nombre: "", usuario: "", contrasena: "", turno: "" });
     setMostrarFormulario(false);
     setModoEdicion(false);
     setBaristaEditando(null);
@@ -66,6 +73,7 @@ export default function BaristasAdmin({ darkMode }) {
   const handleEliminarBarista = (id) => {
     const filtrados = baristas.filter((b) => b.id !== id);
     setBaristas(filtrados);
+    localStorage.setItem("baristas", JSON.stringify(filtrados));
   };
 
   // Editar barista
@@ -73,7 +81,7 @@ export default function BaristasAdmin({ darkMode }) {
     setNuevoBarista({
       nombre: barista.nombre,
       usuario: barista.usuario,
-      contraseña: barista.contraseña,
+      contrasena: barista.contrasena,
       turno: barista.turno,
     });
     setBaristaEditando(barista);
@@ -89,7 +97,7 @@ export default function BaristasAdmin({ darkMode }) {
           onClick={() => {
             setMostrarFormulario(true);
             setModoEdicion(false);
-            setNuevoBarista({ nombre: "", usuario: "", contraseña: "", turno: "" });
+            setNuevoBarista({ nombre: "", usuario: "", contrasena: "", turno: "" });
           }}
           className={darkMode ? "bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600" : "bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800"}
         >
@@ -116,7 +124,7 @@ export default function BaristasAdmin({ darkMode }) {
                 <td className="p-2">#{b.id}</td>
                 <td className="p-2">{b.nombre}</td>
                 <td className="p-2">{b.usuario}</td>
-                <td className="p-2">{b.contraseña}</td>
+                <td className="p-2">{b.contrasena}</td>
                 <td className="p-2">{b.turno}</td>
                 <td className="p-2 flex gap-2">
                   <button
@@ -161,11 +169,10 @@ export default function BaristasAdmin({ darkMode }) {
                 <option value="Tarde">Tarde</option>
                 <option value="Noche">Noche</option>
               </select>
-              {/* Usuario y contraseña generados automáticamente */}
               {!modoEdicion && nuevoBarista.usuario && (
                 <div>
                   <p><strong>Usuario generado:</strong> {nuevoBarista.usuario}</p>
-                  <p><strong>Contraseña generada:</strong> {nuevoBarista.contraseña}</p>
+                  <p><strong>Contraseña generada:</strong> {nuevoBarista.contrasena}</p>
                 </div>
               )}
               <div className="flex justify-end gap-2">
@@ -178,7 +185,7 @@ export default function BaristasAdmin({ darkMode }) {
                 </button>
                 <button
                   type="submit"
-                  className={darkMode ? "bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600" : "bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800"}
+                  className={darkMode ? "bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600" : "bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600"}
                 >
                   {modoEdicion ? "Guardar Cambios" : "Guardar"}
                 </button>
