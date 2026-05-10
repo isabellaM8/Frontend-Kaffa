@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function PieDePagina() {
   return (
     <footer className="bg-green-900 text-white py-10 px-6 mt-10">
@@ -31,11 +33,11 @@ export default function PieDePagina() {
         <div>
           <h2 className="text-xl font-bold mb-4">Enlaces Rápidos</h2>
           <ul className="space-y-2">
-            <li><a href="/" className="hover:underline">Inicio</a></li>
-            <li><a href="/menu" className="hover:underline">Menú</a></li>
-            <li><a href="/eventos" className="hover:underline">Eventos</a></li>
-            <li><a href="/sobre-nosotros" className="hover:underline">Sobre Nosotros</a></li>
-            <li><a href="/contactos" className="hover:underline">Contacto</a></li>
+            <li><Link to="/" className="hover:underline">Inicio</Link></li>
+            <li><Link to="/menu" className="hover:underline">Menú</Link></li>
+            <li><Link to="/eventos" className="hover:underline">Eventos</Link></li>
+            <li><Link to="/sobreNosotros" className="hover:underline">Sobre Nosotros</Link></li>
+            <li><Link to="/contactos" className="hover:underline">Contacto</Link></li>
           </ul>
         </div>
       </div>

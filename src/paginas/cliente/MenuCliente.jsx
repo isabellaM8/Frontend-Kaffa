@@ -2,41 +2,42 @@ import capuchinoImg from "../../imagenes/capuchino.jpg";
 import latteImg from "../../imagenes/latte.jpg";
 import mochaImg from "../../imagenes/mocha.jpg";
 
-export default function MenuCliente() {
-  const handleComprar = (producto) => {
-    // Guardar producto en el carrito
-    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-    carrito.push(producto);
-    localStorage.setItem("carrito", JSON.stringify(carrito));
+const productos = [
+  { id: 1, nombre: "Capuchino", precio: 8000, imagen: capuchinoImg, descripcion: "Espresso suave con leche cremosa." },
+  { id: 2, nombre: "Latte", precio: 7500, imagen: latteImg, descripcion: "Taza cálida con espuma aterciopelada." },
+  { id: 3, nombre: "Mocha", precio: 9000, imagen: mochaImg, descripcion: "Café con chocolate y crema." },
+];
 
-    alert(`✅ ${producto.nombre} agregado al carrito`);
-  };
-
+export default function MenuCliente({ darkMode, onAddToCart }) {
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h2 style={{ textAlign: "center" }}>Menú Cliente</h2>
-
-      <div style={{ display: "flex", gap: "20px", justifyContent: "center", marginTop: "30px" }}>
-        <Producto nombre="Capuchino" precio={8000} imagen={capuchinoImg} onComprar={handleComprar} />
-        <Producto nombre="Latte" precio={7500} imagen={latteImg} onComprar={handleComprar} />
-        <Producto nombre="Mocha" precio={9000} imagen={mochaImg} onComprar={handleComprar} />
+    <div className={darkMode ? "bg-gray-900 p-6 rounded-xl shadow" : "bg-white p-6 rounded-xl shadow"}>
+      <div className="mb-6 flex flex-col gap-2">
+        <h2 className="text-3xl font-bold">Menú Kaffa</h2>
+        <p className={darkMode ? "text-gray-300" : "text-gray-600"}>Selecciona tu bebida favorita y agrégala al carrito.</p>
       </div>
-    </div>
-  );
-}
 
-function Producto({ nombre, precio, imagen, onComprar }) {
-  return (
-    <div style={{ border: "1px solid #ccc", borderRadius: "8px", padding: "10px", textAlign: "center" }}>
-      <img src={imagen} alt={nombre} style={{ width: "200px", height: "150px", objectFit: "cover", borderRadius: "6px" }} />
-      <h4>{nombre}</h4>
-      <p>${precio.toLocaleString("es-CO")}</p>
-      <button
-        onClick={() => onComprar({ nombre, precio })}
-        style={{ backgroundColor: "green", color: "white", padding: "8px 12px", borderRadius: "5px", marginTop: "10px" }}
-      >
-        Comprar
-      </button>
+      <div className="grid gap-6 md:grid-cols-3">
+        {productos.map((producto) => (
+          <div key={producto.id} className={darkMode ? "bg-gray-800 rounded-3xl p-4 shadow" : "bg-gray-50 rounded-3xl p-4 shadow"}>
+            <img src={producto.imagen} alt={producto.nombre} className="h-44 w-full rounded-2xl object-cover mb-4" />
+            <div className="space-y-3">
+              <div>
+                <h3 className="text-xl font-semibold">{producto.nombre}</h3>
+                <p className={darkMode ? "text-gray-400" : "text-gray-600"}>{producto.descripcion}</p>
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-2xl font-bold text-yellow-600">${producto.precio.toLocaleString("es-CO")}</span>
+                <button
+                  onClick={() => onAddToCart?.(producto)}
+                  className="rounded-full bg-yellow-700 px-4 py-2 text-white hover:bg-yellow-600"
+                >
+                  Agregar
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

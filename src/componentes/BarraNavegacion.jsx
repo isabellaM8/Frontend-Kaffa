@@ -16,12 +16,12 @@ function BarraNavegacion() {
         </div>
 
         {/* Navegación */}
-        <div className="space-x-6">
-          <Link to="/" className="hover:underline">Inicio</Link>
-          <Link to="/Menu" className="hover:underline">Menú</Link>
-          <Link to="/Eventos" className="hover:underline">Eventos</Link>
-          <Link to="/SobreNosotros" className="hover:underline">Sobre Nosotros</Link>
-          <Link to="/Contactos" className="hover:underline">Contactos</Link>
+        <div className="flex flex-wrap items-center gap-4 text-sm">
+          <Link to="/" className="rounded-full bg-white/10 px-4 py-2 transition hover:bg-white/20">Inicio</Link>
+          <Link to="/menu" className="rounded-full bg-white/10 px-4 py-2 transition hover:bg-white/20">Menú</Link>
+          <Link to="/eventos" className="rounded-full bg-white/10 px-4 py-2 transition hover:bg-white/20">Eventos</Link>
+          <Link to="/sobreNosotros" className="rounded-full bg-white/10 px-4 py-2 transition hover:bg-white/20">Sobre Nosotros</Link>
+          <Link to="/contactos" className="rounded-full bg-white/10 px-4 py-2 transition hover:bg-white/20">Contactos</Link>
         </div>
 
         {/* Botones de acción */}

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import ubicacionImg from "../imagenes/imgSN.png";
 
 export default function SeccionSobreNosotros() {
@@ -9,7 +10,20 @@ export default function SeccionSobreNosotros() {
         combinando tradición y calidad en cada taza. Nuestro equipo trabaja
         día a día para brindarte un ambiente acogedor y productos únicos.
       </p>
-      <div className="flex justify-center">
+      <div className="flex flex-col items-center gap-6 lg:flex-row lg:items-start">
+        <div className="space-y-4 lg:w-1/2">
+          <p className="text-gray-600">
+            Descubre nuestra selección de cafés especiales, repostería fresca
+            y un ambiente ideal para trabajar o relajarte. Visítanos y vive la
+            experiencia KAFFA.
+          </p>
+          <Link
+            to="/contactos"
+            className="inline-block rounded-full bg-green-900 px-6 py-3 text-white transition hover:bg-green-800"
+          >
+            Contáctanos
+          </Link>
+        </div>
         <img
           src={ubicacionImg}
           alt="Ubicación KAFFA Café"

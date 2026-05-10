@@ -1,47 +1,52 @@
-import { useEffect, useState } from "react";
-
-export default function CarritoCliente() {
-  const [productos, setProductos] = useState([]);
-  const [total, setTotal] = useState(0);
-
-  useEffect(() => {
-    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-    setProductos(carrito);
-
-    const suma = carrito.reduce((acc, p) => acc + p.precio, 0);
-    setTotal(suma);
-  }, []);
+export default function CarritoCliente({ carrito = [], darkMode, onRemove, onClear }) {
+  const total = carrito.reduce((sum, item) => sum + (item.precio || 0), 0);
 
   return (
-    <div>
-      <h2 className="text-xl font-bold mb-4">Carrito de Compras</h2>
+    <div className={darkMode ? "text-white" : "text-gray-900"}>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold">Carrito de Compras</h2>
+          <p className={darkMode ? "text-gray-300" : "text-gray-600"}>Revisa tus productos antes de confirmar.</p>
+        </div>
+        <button
+          onClick={onClear}
+          className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-500"
+        >
+          Vaciar carrito
+        </button>
+      </div>
 
-      {productos.length === 0 ? (
-        <p>Tu carrito está vacío.</p>
+      {carrito.length === 0 ? (
+        <p className={darkMode ? "text-gray-400" : "text-gray-600"}>Tu carrito está vacío.</p>
       ) : (
-        <>
-          <table className="w-full border-collapse mb-4">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="border p-2">Producto</th>
-                <th className="border p-2">Precio</th>
-              </tr>
-            </thead>
-            <tbody>
-              {productos.map((p, i) => (
-                <tr key={i}>
-                  <td className="border p-2">{p.nombre}</td>
-                  <td className="border p-2">${p.precio.toLocaleString("es-CO")}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="space-y-4">
+          {carrito.map((item, index) => (
+            <div
+              key={`${item.nombre}-${index}`}
+              className={darkMode ? "bg-gray-800 rounded-3xl p-4" : "bg-gray-50 rounded-3xl p-4"}
+            >
+              <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center">
+                <div>
+                  <p className="font-semibold">{item.nombre}</p>
+                  <p className={darkMode ? "text-gray-400" : "text-gray-600"}>Precio: ${item.precio.toLocaleString("es-CO")}</p>
+                </div>
+                <button
+                  onClick={() => onRemove?.(index)}
+                  className="rounded-full bg-red-600 px-4 py-2 text-white hover:bg-red-500"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          ))}
 
-          <div className="text-right">
-            <p><strong>Cantidad de productos:</strong> {productos.length}</p>
-            <p><strong>Total a pagar:</strong> ${total.toLocaleString("es-CO")}</p>
+          <div className={darkMode ? "bg-gray-800 rounded-3xl p-4" : "bg-gray-50 rounded-3xl p-4"}>
+            <div className="flex justify-between items-center">
+              <p className="font-semibold">Total</p>
+              <p className="text-xl font-bold">${total.toLocaleString("es-CO")}</p>
+            </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

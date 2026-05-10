@@ -23,7 +23,7 @@ function Bienvenida() {
       let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
       if (producto) carrito.push(producto);
       localStorage.setItem("carrito", JSON.stringify(carrito));
-      navigate("/dashboard-cliente", { replace: true });
+      navigate("/cliente", { replace: true });
     }
   };
 
